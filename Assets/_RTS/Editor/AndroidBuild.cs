@@ -1,0 +1,7 @@
+using UnityEditor;
+using UnityEditor.SceneManagement;
+using UnityEngine;
+public static class AndroidBuild {
+ [MenuItem("RTS/Create Battlefield")] public static void Setup(){System.IO.Directory.CreateDirectory("Assets/_RTS/Scenes");var scene=EditorSceneManager.NewScene(NewSceneSetup.EmptyScene,NewSceneMode.Single);new GameObject("Game").AddComponent<RTS.Battlefield>();EditorSceneManager.SaveScene(scene,"Assets/_RTS/Scenes/Battlefield.unity");PlayerSettings.companyName="TMS";PlayerSettings.productName="RTS Strategy";PlayerSettings.SetApplicationIdentifier(UnityEditor.Build.NamedBuildTarget.Android,"com.tms.rtsandroid");PlayerSettings.defaultInterfaceOrientation=UIOrientation.LandscapeLeft;PlayerSettings.Android.minSdkVersion=(AndroidSdkVersions)29;PlayerSettings.Android.targetSdkVersion=(AndroidSdkVersions)36;PlayerSettings.Android.targetArchitectures=AndroidArchitecture.ARM64;PlayerSettings.SetScriptingBackend(UnityEditor.Build.NamedBuildTarget.Android,ScriptingImplementation.IL2CPP);AssetDatabase.SaveAssets();}
+ public static void BuildApk(){Setup();System.IO.Directory.CreateDirectory("Builds/Android");var report=BuildPipeline.BuildPlayer(new[]{"Assets/_RTS/Scenes/Battlefield.unity"},"Builds/Android/RTS.apk",BuildTarget.Android,BuildOptions.Development);if(report.summary.result!=UnityEditor.Build.Reporting.BuildResult.Succeeded)throw new System.Exception("Android build failed");}
+}
